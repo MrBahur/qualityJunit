@@ -1,9 +1,11 @@
+package test;
+
 import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
 
-public class NodeTest {
+public class SpaceTest {
 
     @Before
     public void setUp() throws Exception {
@@ -15,6 +17,18 @@ public class NodeTest {
     }
 
     @Test
-    public void getPath() {
+    public void alloc() {
+    }
+
+    @Test
+    public void dealloc() {
+    }
+
+    @Test
+    public void countFreeSpace() {
+    }
+
+    @Test
+    public void getAlloc() {
     }
 }
