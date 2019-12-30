@@ -85,9 +85,8 @@ public class FileSystemTest {
             f2.file(nameFi1e, 3);
             f2.file(nameFi1e2, 6);
         } catch (BadFileNameException | OutOfSpaceException e) {
-            e.printStackTrace();
+            assertEquals(OutOfSpaceException.class, e.getClass());
         }
-        System.out.println(Arrays.deepToString(f2.disk()));
         assertEquals("[[root, dir1, file1], [root, dir1, file1], [root, dir1, file1], [root, dir3, dir4, file4]," +
                 " [root, dir3, dir4, file4], [root, dir3, dir4, file4], [root, dir3, dir4, file4], [root, dir3, dir4, file4]," +
                 " [root, dir3, dir4, file4], null]", Arrays.deepToString(f2.disk()));
@@ -120,17 +119,17 @@ public class FileSystemTest {
             fileSystem.file(new String[]{"root", "dir1", "file2"}, 2);
 
         } catch (BadFileNameException | OutOfSpaceException e) {
-            e.printStackTrace();
+            Assert.fail();
         }
         try {
             fileSystem.file(new String[]{"root", "dir1", "file2"}, 3);
         } catch (BadFileNameException | OutOfSpaceException e) {
-            assertEquals(BadFileNameException.class, e.getClass());
+            Assert.fail();
         }
         try {
             fileSystem.file(new String[]{"root", "dir1", "file2"}, 4);
         } catch (BadFileNameException | OutOfSpaceException e) {
-            assertEquals(OutOfSpaceException.class, e.getClass());
+            Assert.fail();
         }
         assertEquals("[root, dir1, file2]", Arrays.toString(t1.children.get("file2").getPath()));
         assertEquals("[root, file1]", Arrays.toString(fileSystem.DirExists(new String[]{"root"}).children.get("file1").getPath()));
@@ -169,9 +168,7 @@ public class FileSystemTest {
             fileSystem.rmdir(nameToSearch);
             int y = ((Tree) (fileSystem.DirExists(new String[]{"root"}).children.get("dir1"))).children.size();
             assertEquals(x - 1, y);
-        } catch (BadFileNameException e) {
-            e.printStackTrace();
-        } catch (DirectoryNotEmptyException e) {
+        } catch (BadFileNameException | DirectoryNotEmptyException e) {
             Assert.fail();
         }
     }
@@ -186,7 +183,7 @@ public class FileSystemTest {
             fileSystem.dir(nameToSearch4);
             fileSystem.dir(nameToSearch3);
         } catch (BadFileNameException e) {
-            e.printStackTrace();
+            Assert.fail();
         }
         boolean tester = false;
         Tree t3 = fileSystem.DirExists(new String[]{"root"});

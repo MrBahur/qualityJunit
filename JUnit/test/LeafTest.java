@@ -1,5 +1,6 @@
 package test;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -28,25 +29,11 @@ public class LeafTest {
 
     @Test
     public void testGetPath() {
-        HashMap<String, Node> childrenOfRoot = fileSystem.DirExists(new String[]{"root"}).children;
-        Iterator it = childrenOfRoot.entrySet().iterator();
-        it.next();
-        while (it.hasNext()) {
-            Map.Entry pair = (Map.Entry) it.next();
-            if (pair.getValue() instanceof Leaf) {
-                ArrayList<String> path = new ArrayList<String>();
-                Node thisNode = ((Node) pair.getValue());
-                while (thisNode.parent != null && thisNode != null) {
-                    String toPath = thisNode.getPath()[thisNode.getPath().length - 1];
-                    path.add(toPath);
-                    thisNode = thisNode.parent;
-                }
-                Collections.reverse(path);
-                assertEquals(Arrays.toString(path.toArray()), Arrays.toString(fileSystem.FileExists(new String[]{"root", "file1"}).getPath()));
-
-            }
-        }
-        it.remove(); // avoids a ConcurrentModificationException
+        assertEquals("[root]", Arrays.toString(fileSystem.DirExists(new String[]{"root"}).getPath()));
+        assertEquals("[root, file1]", Arrays.toString(fileSystem.DirExists(new String[]{"root"}).children.get("file1").getPath()));
+        assertEquals("[root, dir1]", Arrays.toString(fileSystem.DirExists(new String[]{"root"}).children.get("dir1").getPath()));
+        assertEquals("[root, dir1, dir2]", Arrays.toString(((Tree) (fileSystem.DirExists(new String[]{"root"}).children.get("dir1"))).children.get("dir2").getPath()));
+        assertEquals("[root, dir3, dir4]", Arrays.toString(((Tree) (fileSystem.DirExists(new String[]{"root"}).children.get("dir3"))).children.get("dir4").getPath()));
     }
 
     @Test
@@ -57,7 +44,6 @@ public class LeafTest {
         } catch (OutOfSpaceException e) {
             e.printStackTrace();
         }
-        //assertEquals("test", l1.name);
         assertEquals(0, l1.size);
 
 
@@ -68,7 +54,6 @@ public class LeafTest {
             e.printStackTrace();
         }
         assertEquals(l2.size, 0);
-        //assertNull(l2.name);
 
     }
 
@@ -77,8 +62,13 @@ public class LeafTest {
         Leaf l1 = null;
         try {
             l1 = new Leaf("test", 1000);
+            Assert.fail();
+        } catch (NullPointerException e) {
+
+        } catch (OutOfSpaceException e) {
+            assertTrue(true);
         } catch (Exception e) {
-            //assertEquals(new OutOfSpaceException(), e);
+            Assert.fail();
         }
 
     }

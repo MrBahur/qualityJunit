@@ -70,8 +70,8 @@ public class SpaceTest {
             space.Alloc(7, l2);
             try {
                 space.Dealloc(l1);
-            } catch (Exception e1) {
-                assertEquals(NullPointerException.class, e1.getClass());
+            } catch (Exception e) {
+                assertEquals(NullPointerException.class, e.getClass());
             }
             assertEquals(3, space.countFreeSpace());
             assertNull(space.getAlloc()[0]);
@@ -79,8 +79,8 @@ public class SpaceTest {
             assertNull(space.getAlloc()[2]);
             try {
                 space.Dealloc(l2);
-            } catch (Exception e1) {
-                assertEquals(NullPointerException.class, e1.getClass());
+            } catch (Exception e) {
+                assertEquals(NullPointerException.class, e.getClass());
             }
             assertNull(space.getAlloc()[3]);
             assertNull(space.getAlloc()[4]);
@@ -102,7 +102,7 @@ public class SpaceTest {
             space.Alloc(3, l1);
             assertEquals(7, space.countFreeSpace());
         } catch (OutOfSpaceException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
         }
     }
 
@@ -115,7 +115,7 @@ public class SpaceTest {
                 space.Alloc(1, leaves[i]);
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            //e.printStackTrace();
         }
         for (int i = 0; i < 10; i++) {
             assertEquals(leaves[i], space.getAlloc()[i]);

@@ -1,8 +1,10 @@
 package test;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.lang.reflect.Field;
 import java.util.*;
 
 import static org.junit.Assert.*;
@@ -29,24 +31,10 @@ public class NodeTest {
 
     @Test
     public void testGetPath() {
-        HashMap<String, Node> childrenOfRoot = fileSystem.DirExists(new String[]{"root"}).children;
-        Iterator it = childrenOfRoot.entrySet().iterator();
-        it.next();
-        while (it.hasNext()) {
-            Map.Entry pair = (Map.Entry) it.next();
-            if (pair.getValue() instanceof Node) {
-                ArrayList<String> path = new ArrayList<String>();
-                Node thisNode = ((Node) pair.getValue());
-                while (thisNode.parent != null && thisNode != null) {
-                    String toPath = thisNode.getPath()[thisNode.getPath().length - 1];
-                    path.add(toPath);
-                    thisNode = thisNode.parent;
-                }
-                Collections.reverse(path);
-                assertEquals(Arrays.toString(path.toArray()), Arrays.toString(fileSystem.FileExists(new String[]{"root", "file1"}).getPath()));
-
-            }
-        }
-        it.remove(); // avoids a ConcurrentModificationException
+        assertEquals("[root]", Arrays.toString(fileSystem.DirExists(new String[]{"root"}).getPath()));
+        assertEquals("[root, file1]", Arrays.toString(fileSystem.DirExists(new String[]{"root"}).children.get("file1").getPath()));
+        assertEquals("[root, dir1]", Arrays.toString(fileSystem.DirExists(new String[]{"root"}).children.get("dir1").getPath()));
+        assertEquals("[root, dir1, dir2]", Arrays.toString(((Tree) (fileSystem.DirExists(new String[]{"root"}).children.get("dir1"))).children.get("dir2").getPath()));
+        assertEquals("[root, dir3, dir4]", Arrays.toString(((Tree) (fileSystem.DirExists(new String[]{"root"}).children.get("dir3"))).children.get("dir4").getPath()));
     }
 }
